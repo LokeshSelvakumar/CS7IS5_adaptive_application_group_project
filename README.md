@@ -9,3 +9,6 @@ https://docs.google.com/document/d/1zQ8Ka6lIMlqHYjYMmlsnip8vTpQop8p6xOqVNdbDZJw/
 
 Report Link:
 https://docs.google.com/document/d/1Vpo5BInZ5KBkrfYIgbVNZYdHEuQeloiW88RlwqFuCNU/edit
+
+PPT link:
+https://onedrive.live.com/view.aspx?resid=F279953AF6A91188!32020&ithint=file%2cpptx&authkey=!AIxZP2pWGNbHq8Y
