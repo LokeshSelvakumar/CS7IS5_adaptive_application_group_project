@@ -6,3 +6,6 @@ https://github.com/LokeshSelvakumar/CS7IS5_adaptive_application_group_project
 
 Google doc link:
 https://docs.google.com/document/d/1zQ8Ka6lIMlqHYjYMmlsnip8vTpQop8p6xOqVNdbDZJw/edit?usp=sharing
+
+Report Link:
+https://docs.google.com/document/d/1Vpo5BInZ5KBkrfYIgbVNZYdHEuQeloiW88RlwqFuCNU/edit
