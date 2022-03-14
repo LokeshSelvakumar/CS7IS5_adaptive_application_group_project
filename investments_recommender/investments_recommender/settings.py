@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'NEWS_HANDLER'
+    'NEWS_HANDLER',
+    'STOCKS_HANDLER'
 ]
 
 MIDDLEWARE = [
