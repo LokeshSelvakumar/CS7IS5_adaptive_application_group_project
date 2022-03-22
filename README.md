@@ -14,3 +14,6 @@ https://docs.google.com/document/d/1Vpo5BInZ5KBkrfYIgbVNZYdHEuQeloiW88RlwqFuCNU/
 
 PPT link:
 https://onedrive.live.com/view.aspx?resid=F279953AF6A91188!32020&ithint=file%2cpptx&authkey=!AIxZP2pWGNbHq8Y
+
+gmail: bullfinchadaptiveapp@gmail.com
+password : Bullneverflinch$
