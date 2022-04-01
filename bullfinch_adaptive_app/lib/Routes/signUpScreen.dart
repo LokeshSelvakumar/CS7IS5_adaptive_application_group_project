@@ -74,13 +74,14 @@ class _signUpScreenState extends State<signUpScreen> {
                         child: Column(children: <Widget>[
                           SizedBox(height: 20.0),
                           TextFormField(
+                            obscureText: false,
                             onChanged: (val) {
                               setState(() => email = val);
                             },
                           ),
                           SizedBox(height: 20.0),
                           TextFormField(
-                            obscureText: true,
+                            obscureText: false,
                             onChanged: (val) {
                               setState(() => password = val);
                             },
@@ -105,11 +106,10 @@ class _signUpScreenState extends State<signUpScreen> {
                           minWidth: double.infinity,
                           height: 60,
                           onPressed: () async {
-                            signUp(email, password).then((result){
-                              if(result == "success"){
+                            signUp(email, password).then((result) {
+                              if (result == "success") {
                                 Navigator.of(context).pushNamed("/homePage");
-                              }
-                              else{
+                              } else {
                                 return showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -151,14 +151,18 @@ class _signUpScreenState extends State<signUpScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("Already have an account? "),
-                        Text(
-                          "Login",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                            color: Colors.blue,
+                        new GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, "/");
+                          },
+                          child: new Text(
+                            "Sign In",
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.blue,
+                                decoration: TextDecoration.underline),
                           ),
-                        ),
+                        )
                       ],
                     )
                   ],
@@ -172,13 +176,11 @@ class _signUpScreenState extends State<signUpScreen> {
   }
 
   Future<String> signUp(String email, String password) async {
-    UserCredential user ;
+    UserCredential user;
     try {
-      user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email,
-          password: password
-      );
-      print(FirebaseAuth.instance.currentUser?.uid.toString());
+      user = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      FirebaseAuth.instance.currentUser?.updateDisplayName("dummy name");
       return 'success';
     } on FirebaseAuthException catch (e) {
       return e.code;

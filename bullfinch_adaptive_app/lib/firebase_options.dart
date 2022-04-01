@@ -17,20 +17,14 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     // ignore: missing_enum_constant_in_switch
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -43,11 +37,31 @@ class DefaultFirebaseOptions {
     );
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyA-mQtmigcacLzXPEirsQFX1q-06qJBkNk',
+    appId: '1:203734971499:web:0cd6da83e8f1ca5be6ed2e',
+    messagingSenderId: '203734971499',
+    projectId: 'bullfinch-adaptive-app',
+    authDomain: 'bullfinch-adaptive-app.firebaseapp.com',
+    storageBucket: 'bullfinch-adaptive-app.appspot.com',
+    measurementId: 'G-QSP4QC9LRF',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyB-jo76X4jDF-AB4GlDwGFORviiz6wS91E',
     appId: '1:203734971499:android:20cecf80c91871d7e6ed2e',
     messagingSenderId: '203734971499',
     projectId: 'bullfinch-adaptive-app',
     storageBucket: 'bullfinch-adaptive-app.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyDijIu1fmi9vzTf_wmFmmU847Bo9dGc7Mc',
+    appId: '1:203734971499:ios:2aa9dbbe2d40acc3e6ed2e',
+    messagingSenderId: '203734971499',
+    projectId: 'bullfinch-adaptive-app',
+    storageBucket: 'bullfinch-adaptive-app.appspot.com',
+    iosClientId: '203734971499-r9duokmva7spsrsp5q7hvracmrhin9k0.apps.googleusercontent.com',
+    iosBundleId: 'com.bullfinch.app.ios',
   );
 }

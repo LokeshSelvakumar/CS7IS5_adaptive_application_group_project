@@ -113,23 +113,24 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                         }
                       });
                     })),
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                child: MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: new GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, "/signUp");
-                      },
-                      child: new Text(
-                        "Sign Up",
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline),
-                      ),
-                    )))
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Create a new account? "),
+                new GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, "/signUp");
+                  },
+                  child: new Text(
+                    "Sign Up",
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline),
+                  ),
+                )
+              ],
+            )
           ]));
   }
 
