@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Routes/login.dart';
+import 'Routes/news_stocks_ui.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (context) => loginScreen(),
+        '/ui': (context) => UIScreen(),
       },
     );
   }
