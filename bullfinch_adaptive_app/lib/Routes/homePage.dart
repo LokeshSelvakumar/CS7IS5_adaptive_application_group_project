@@ -1,23 +1,45 @@
-
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-class homePage extends StatefulWidget {
-  const homePage({Key? key}) : super(key: key);
-
-  @override
-  _homePageState createState() => _homePageState();
+import '../widgets/news.dart';
+import '../models/news_model.dart';
+/*
+* UI for showing news and stocks
+*
+* */
+class HomePage extends StatefulWidget {
+    createState(){
+        return HomePageState();
+    }
 }
 
-class _homePageState extends State<homePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("home page")),
-      body: Container(
-        child: Text('homepage placeholder'),
-      ),
-    );
-  }
+class HomePageState extends State<HomePage>{
+    Widget build(context){
+        return MaterialApp(
+            home: Scaffold(
+                appBar: AppBar(
+                    title: Text('Your Feed'),
+                ),
+                body: Wrap(
+                    spacing: 8.0,
+                    children: <Widget>[
+                        Container(
+                            height: 500,
+                            width: 500,
+                            color: Colors.red,
+                            margin: EdgeInsets.all(20),
+                            padding: EdgeInsets.all(20),
+                            child: News([])
+                        ),
+                        Container(
+                            height: 500,
+                            width: 500,
+                            color: Colors.green,
+                            margin: EdgeInsets.all(20),
+                            padding: EdgeInsets.all(20),
+                            child: Text("Stock Feed")
+                        ),
+                    ]//Widget
+                )
+            )//Scaffold
+        );//Material App
+    }
 }
