@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
+
 /*
 * Login screen class is used to implement authentication of users
 *
@@ -82,7 +83,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                       signIn(userNameController.text, passwordController.text)
                           .then((result) {
                         if (result == "success") {
-                          Navigator.of(context).pushNamed("/intermediateUI",arguments: "Dublin Bikes");
+                          Navigator.of(context).pushNamed("/homePage");
                         } else if (result == "network-request-failed") {
                           return showSimpleNotification(
                               Text(
@@ -119,10 +120,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                     cursor: SystemMouseCursors.click,
                     child: new GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, "/intermediateUI",arguments: "Dublin Bikes");
+                        Navigator.pushNamed(context, "/signUp");
                       },
                       child: new Text(
-                        "Continue as a guest",
+                        "Sign Up",
                         style: TextStyle(
                             fontSize: 16,
                             color: Colors.blue,

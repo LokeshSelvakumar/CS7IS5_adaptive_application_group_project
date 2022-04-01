@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5250f187-090a-43aa-8897-08a569e7bab4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../bullfinch_adaptive_app/lib/Routes/login.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../bullfinch_adaptive_app/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../bullfinch_adaptive_app/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../bullfinch_adaptive_app/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../bullfinch_adaptive_app/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../bullfinch_adaptive_app/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../bullfinch_adaptive_app/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,5 +50,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
