@@ -6,6 +6,7 @@ import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 
 file_name = ["CNBC", "NASDAQ", "MarketWatch", "SPGlobal", "SeekingAlpha", "CNNFinance", "YahooFinance"]
+news_categorzation = ['finance', 'energy', 'media']
 # Create a new instance of the News Client.
 news_client = News()
 
@@ -15,10 +16,10 @@ def save_file(file_name, news_data):
         json.dump(news_data, f, indent=4)
 
 
-def cnbc():
+def cnbc(topic):
     # Grab the finance news.
     cnbc_news_client = news_client.cnbc
-    news_data = cnbc_news_client.news_feed(topic='finance')
+    news_data = cnbc_news_client.news_feed(topic=topic)
     return news_data
 
 
@@ -59,10 +60,16 @@ def yahoo_finance():
 
 
 def get_news():
-    save_file(file_name[0], cnbc())
+    # save_file(file_name[0], cnbc())
     save_file(file_name[1], nasdaq())
     save_file(file_name[2], market_watch())
     save_file(file_name[3], sp_global())
     save_file(file_name[4], seeking_alpha())
     save_file(file_name[5], cnn_finance())
     save_file(file_name[6], yahoo_finance())
+
+
+def categorization():
+    for item in news_categorzation:
+        with open(file="../NEWS_HANDLER/news_data/cnbc/" + item + ".json", mode='w', encoding="utf-8") as f:
+            json.dump(cnbc(item), f, indent=4)
