@@ -17,3 +17,6 @@ https://onedrive.live.com/view.aspx?resid=F279953AF6A91188!32020&ithint=file%2cp
 
 gmail: bullfinchadaptiveapp@gmail.com
 password : Bullneverflinch$
+
+Run Frontend: ```flutter run``` <br>
+Run Backend (in venv): ```py manage.py runserver```
