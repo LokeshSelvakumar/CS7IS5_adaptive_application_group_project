@@ -1,0 +1,30 @@
+asgiref @ file:///home/conda/feedstock_root/build_artifacts/asgiref_1642912811357/work
+backports.zoneinfo==0.2.1
+beautifulsoup4==4.10.0
+certifi==2021.10.8
+charset-normalizer==2.0.12
+dateparser==1.1.0
+Django @ file:///home/conda/feedstock_root/build_artifacts/django_1638897748254/work
+fake-useragent==0.1.11
+feedparser==6.0.8
+fin-news==0.1.2
+GoogleNews==1.6.0
+idna==3.3
+lxml==4.8.0
+multitasking==0.0.10
+numpy==1.22.3
+pandas==1.4.1
+python-dateutil==2.8.2
+pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1633452062248/work
+pytz-deprecation-shim==0.1.0.post0
+regex==2022.1.18
+requests==2.27.1
+sgmllib3k==1.0.0
+six==1.16.0
+soupsieve==2.3.1
+sqlparse @ file:///home/conda/feedstock_root/build_artifacts/sqlparse_1631317292236/work
+typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1644850595256/work
+tzdata==2021.5
+tzlocal==4.1
+urllib3==1.26.8
+yfinance==0.1.70
