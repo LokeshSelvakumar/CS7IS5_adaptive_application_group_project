@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage>{
-  MySearchBarState searchBar = MySearchBarState();
+  //MySearchBarState searchBar = MySearchBarState();
   Widget build(context){
       return MaterialApp(
           home: Scaffold(
@@ -28,7 +28,6 @@ class HomePageState extends State<HomePage>{
               body: Wrap(
                   spacing: 20,
                   children: <Widget>[
-                      //MySearchBar(),
                       Container(
                           height: 500,
                           width: 500,
@@ -52,19 +51,17 @@ class HomePageState extends State<HomePage>{
                           child: Column(
                             children: [
                               ElevatedButton.icon(
-                                onPressed: () {
-                                  print("search");
-                                  searchBar.showSearch();
-                                }, 
+                                onPressed: (){
+                                  showSearch(context: context, delegate: MySearchBar());
+                                },
                                 icon: Icon(
                                   Icons.search
-                                ), 
+                                ),
                                 label: Text("Search Stocks"),
                               ),
                               Container(
                                 height: 250,
                                 width: 500,
-                                
                                 decoration: BoxDecoration(
                                   //color: Colors.teal,
                                   borderRadius: BorderRadius.circular(5),
@@ -74,7 +71,7 @@ class HomePageState extends State<HomePage>{
                               Container(
                                 height: 150,
                                 width: 500,
-                                margin: EdgeInsets.only(top: 30),
+                                margin: EdgeInsets.only(top: 10),
                                 padding: EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                   color: Colors.cyan.shade700,
@@ -97,39 +94,66 @@ class HomePageState extends State<HomePage>{
   }
 }
 
-class MySearchBar extends StatefulWidget{
+class MySearchBar extends SearchDelegate{
+  List<String> stockResultsList = [
+    'Google',
+    'Tesla',
+    'Microsoft'
+  ];
+
   @override
-  MySearchBarState createState() => MySearchBarState();
-}
+  Widget? buildLeading(BuildContext context) => IconButton(
+    icon: Icon(Icons.arrow_back),
+    onPressed: (){
+      close(context, null);
+    },
+  );
 
-class MySearchBarState extends State<MySearchBar>{
-  bool isOnScreen = false;
+  @override
+  List<Widget> buildActions(BuildContext context) => [
+    IconButton(
+      icon: Icon(Icons.clear),
+      onPressed: (){
+        if(query.isEmpty){
+          close(context, null);
+        }
+        else{
+          query = '';
+        }
+      },
+    ),
+  ];
 
-  void showSearch(){
-    setState((){
-      isOnScreen = true;
-    });
-  }
+  @override
+  Widget buildResults(BuildContext context) => Center(
+    child: Text(
+      query
+    ),
+  );
 
-  void hideSearch(){
-    setState((){
-      isOnScreen = true;
-    });
-  }
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<String> suggestions = stockResultsList.where((stockResultsList){
+      final result = stockResultsList.toLowerCase();
+      final input = query.toLowerCase();
+      return result.contains(input);
+    }).toList();
+    
+    return ListView.builder(
+      itemCount: suggestions.length,
+      itemBuilder: (context, index){
+        final suggestion = suggestions[index];
 
-  Widget build(BuildContext context){
-    return Visibility(
-      maintainAnimation: true,
-      maintainSize: true,
-      maintainState: true,
-      visible: isOnScreen,
-      child: Container(
-        width: 600,
-        height: 500,
-        color: Colors.red.shade300,
-        child: Text("Search Bar"),
-        padding: EdgeInsets.all(20),
-      )
-    );
+        return ListTile(
+          title: Text(suggestion),
+          onTap: (){
+            print("selected suggestion");
+            query = suggestion;
+            close(context, null);
+            //showResults(context);
+          }
+        );
+      },
+    ); 
   }
 }

@@ -14,7 +14,7 @@ class Stocks extends StatelessWidget {
           child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: 5,
+          itemCount: 7,
           itemBuilder: (context, int index){
               return buildStocks();
           }
