@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../models/stocks_model.dart';
 
-class Stocks extends StatelessWidget {
+class RecommendedStocks extends StatelessWidget {
     final List<StocksModel> stocks;
     final ScrollController _scrollController = ScrollController();
     
-    Stocks(this.stocks);
+    RecommendedStocks(this.stocks);
 
     Widget build(context){
         return Scrollbar(
@@ -14,7 +14,7 @@ class Stocks extends StatelessWidget {
           child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: 5,
+          itemCount: 2,
           itemBuilder: (context, int index){
               return buildStocks();
           }
@@ -25,7 +25,7 @@ class Stocks extends StatelessWidget {
     Widget buildStocks(){
         return GestureDetector(
           onTap: (){
-            print("Stock click");
+            addNewStock();
           },
           child: Container(
           margin: EdgeInsets.all(5),
@@ -40,11 +40,16 @@ class Stocks extends StatelessWidget {
           ),
           child:  Column(
               children: <Widget>[
-                  Text("Your Stock")
+                  Text("Recommended Stock")
               ]
           )
         ),
       );  
+    }
+
+    void addNewStock(){
+      print("New Stock tracked");
+      //Send to backend
     }
 
 }

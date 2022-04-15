@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/news.dart';
 import '../widgets/stocks.dart';
+import '../widgets/recommendedStocks.dart';
 import '../models/news_model.dart';
 import '../models/stocks_model.dart';
 
@@ -22,12 +23,12 @@ class HomePageState extends State<HomePage>{
                     title: Text('Your Feed'),
                 ),
                 body: Wrap(
-                    spacing: 10,
+                    spacing: 20,
                     children: <Widget>[
                         Container(
                             height: 500,
                             width: 500,
-                            margin: EdgeInsets.only(left: 20, top: 20, bottom: 20),
+                            margin: EdgeInsets.only(left: 100, top: 20, bottom: 20),
                             padding: EdgeInsets.all(20),
                             decoration: BoxDecoration(
                                 color: Colors.teal.shade100,
@@ -61,15 +62,13 @@ class HomePageState extends State<HomePage>{
                                   margin: EdgeInsets.only(top:10),
                                   padding: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
-                                    color: Colors.red.shade300,
+                                    color: Colors.cyan.shade700,
                                     borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                    )
                                   ),
                                   child: Column(
                                     children: [
                                       Text("Recommended Stocks"),
-                                      Stocks([])
+                                      RecommendedStocks([])
                                     ],
                                   )
                                 )//recommended stock

@@ -26,7 +26,7 @@ class News extends StatelessWidget {
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
           onTap: (){
-            print("Clicked on something");
+            trackClick();
           },
           child: Container(
             margin: EdgeInsets.all(10),
@@ -36,7 +36,7 @@ class News extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                     color: Colors.blue,
-                    width: 2.5,
+                    width: 1.5,
                 ),
             ),
             child:  Column(
@@ -47,6 +47,11 @@ class News extends StatelessWidget {
           ),
         )
       );
+    }
+
+    void trackClick(){
+      print("Click tracked");
+      //Send to backend
     }
 
 }
