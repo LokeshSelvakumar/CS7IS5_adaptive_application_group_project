@@ -30,7 +30,7 @@ class HomePageState extends State<HomePage>{
                   children: <Widget>[
                       Container(
                           height: 500,
-                          width: 500,
+                          width: 600,
                           margin: EdgeInsets.only(left: 100, top: 20, bottom: 20),
                           padding: EdgeInsets.all(20),
                           decoration: BoxDecoration(
@@ -41,7 +41,7 @@ class HomePageState extends State<HomePage>{
                       ),
                       Container(
                           height: 500,
-                          width: 500,
+                          width: 400,
                           margin: EdgeInsets.all(20),
                           padding: EdgeInsets.all(20),
                             decoration: BoxDecoration(
@@ -71,8 +71,8 @@ class HomePageState extends State<HomePage>{
                               Container(
                                 height: 150,
                                 width: 500,
-                                margin: EdgeInsets.only(top: 10),
-                                padding: EdgeInsets.all(5),
+                                margin: EdgeInsets.only(top: 30),
+                                padding: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                   color: Colors.cyan.shade700,
                                   borderRadius: BorderRadius.circular(5),

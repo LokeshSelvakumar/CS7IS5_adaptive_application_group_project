@@ -23,26 +23,30 @@ class RecommendedStocks extends StatelessWidget {
     }
 
     Widget buildStocks(){
-        return GestureDetector(
+        return Align(
+          alignment: Alignment.center,
+          child: GestureDetector(
           onTap: (){
             addNewStock();
           },
           child: Container(
-          margin: EdgeInsets.all(5),
-          padding: EdgeInsets.all(10), 
-          decoration: BoxDecoration(
-              color: Colors.teal.shade50,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                  color: Colors.blue,
-                  width: 1.5,
-              ),
+            width: 200,
+            margin: EdgeInsets.all(8),
+            padding: EdgeInsets.all(10), 
+            decoration: BoxDecoration(
+                color: Colors.teal.shade50,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                    color: Colors.blue,
+                    width: 1.5,
+                ),
+            ),
+            child:  Column(
+                children: <Widget>[
+                    Text("Recommended Stock")
+                ]
+            )
           ),
-          child:  Column(
-              children: <Widget>[
-                  Text("Recommended Stock")
-              ]
-          )
         ),
       );  
     }
