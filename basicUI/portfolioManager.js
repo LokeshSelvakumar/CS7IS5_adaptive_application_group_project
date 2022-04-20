@@ -5,24 +5,56 @@ $('document').ready(function(){
         source: STOCKS
     });
     getNews();
+    getStocks();
+    getStockRecs();
 });
 
 
 function getNews(){
     console.log('getting news');
     //call backend first
-    append();
+    appendNews();
 }
 
 function getStocks(){
     //get user's stocks
+    appendStocks();
 }
 
 function getStockRecs(){
     //get user's stock reccomendations
+    appendStockRecs();
 }
 
-function append(){
-    var item = '<a href="" class="text-dark"> <div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"><strong>New Article</strong></p></div></div></a>';
+function addStock(ticker){
+    // api call 
+    console.log("adding stock: " + ticker);
+}
+
+function appendNews(){ 
+    //from API response (iterate through)
+    var link = "";
+    var article = "News Article";
+
+    var linkHtml = '<a target="_blank" href="' + link + '" class="text-dark">'; 
+    var news = '<div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"> <strong>' + article + '</strong></p>';
+
+    var item = linkHtml + news;
+    
     $('#news').append(item);
+}
+
+function appendStocks(){
+    // from API call (iterate through)
+    var stock = "Stock";
+    var item = '<div class="text-dark"> <div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"><strong>' + stock + '</strong></p></div></div></div>';
+    $('#stocks').append(item);
+}
+
+function appendStockRecs(){
+    //from API call (iterate through)
+    var stockRecName = "Recommended Stock";
+    var stockRecTicker = "'ABCD'";
+    var item = '<div class="text-dark"> <div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"><strong>' + stockRecName + '</strong></p><button onclick="addStock(' + stockRecTicker + ')" type="button" class="cursor-pointer btn btn-primary">Add to Portfolio</button></div></div></div>';
+    $('#stock-recs').append(item);
 }
