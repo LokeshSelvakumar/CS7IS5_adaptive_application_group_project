@@ -2,7 +2,7 @@ from unicodedata import category
 from django.db import models
 
 # Create your models here.
-class NEWS:
+class News(models.Model):
     #attributes from API
     id = models.CharField(max_length=15)
     publication_date = models.DateTimeField('date published')
