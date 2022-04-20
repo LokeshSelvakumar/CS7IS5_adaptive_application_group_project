@@ -5,6 +5,7 @@ from ..NEWS_HANDLER.models import News
 
 # Create your models here.
 class Users(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=20)
     age = models.IntegerField()
     gender = models.CharField(choices=(('MALE','Male'), ('FEMALE','Female')))
