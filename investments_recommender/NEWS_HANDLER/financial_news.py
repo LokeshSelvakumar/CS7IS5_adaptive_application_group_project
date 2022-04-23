@@ -1,6 +1,7 @@
 import json
 from pprint import pprint
 from finnews.client import News
+from yahoo_fin.stock_info import *
 
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -73,3 +74,25 @@ def categorization():
     for item in news_categorzation:
         with open(file="../NEWS_HANDLER/news_data/cnbc/" + item + ".json", mode='w', encoding="utf-8") as f:
             json.dump(cnbc(item), f, indent=4)
+
+def get_trending_stock():
+    trending_stock = dict()
+    company = tickers_sp500(include_company_data = False)
+    for i in range(len(company)):
+        trending_stock[company[i]] = get_live_price(company[i])
+    print(trending_stock)
+    with open(file="../NEWS_HANDLER/stock_data/live_price_500.json", mode='w', encoding="utf-8") as f:
+        json.dump(trending_stock, f, indent=4)
+
+def abbreviation_to_full():
+    abbreviation_to_full = dict()
+    company_data = tickers_sp500(include_company_data=True)
+    for indexs in company_data.index:
+        abbreviation_to_full[company_data.loc[indexs].values[0]] = company_data.loc[indexs].values[1]
+    with open(file="../NEWS_HANDLER/stock_data/abbreviation_to_full_500_companies.json", mode='w', encoding="utf-8") as f:
+        json.dump(abbreviation_to_full, f, indent=4)
+
+
+
+
+abbreviation_to_full()
