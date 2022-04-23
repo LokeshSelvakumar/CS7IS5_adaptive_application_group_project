@@ -90,17 +90,59 @@ def process_email_step(message):
     except Exception as e:
         bot.reply_to(message, 'oooops')
 
+
 def process_salary_step(message):
     try:
         chat_id = message.chat.id
         salary = message.text
         user = user_dict[chat_id]
         user.salary = salary
-        bot.send_message(chat_id, 'Nice to meet you')
-        bot.send_message(chat_id, "You can check the real-time price of any stocks. Try 'price ticker_name'")
-        #bot.register_next_step_handler(msg, process_email_step)
+        msg = bot.reply_to(message, 'Have you invested in stocks? Answer: Y or N')
+        bot.register_next_step_handler(msg, check_portfolio)
     except Exception as e:
         bot.reply_to(message, 'oooops')
+
+def check_portfolio(message):
+    try:
+        chat_id = message.chat.id
+        text = message.text
+        if text == 'Y':
+            bot.send_message(chat_id, 'what are the stocks you have invested on? ')
+            bot.send_message(chat_id, 'Please refer the stock symbols below.')
+            bot.send_message(chat_id,"https://www.slickcharts.com/sp500",parse_mode='HTML')
+            bot.send_message(chat_id,"To add stock to your portfolio follow the below format")
+            bot.send_message(chat_id, "stock_symbol units")
+            msg = bot.reply_to(message,'EG: amazn 100')
+            bot.register_next_step_handler(msg, add_portfolio)
+        elif text == 'N':
+            msg = bot.reply_to(message,'Nice to meet you')
+            bot.register_next_step_handler(msg,show_stock_price)
+    except:
+        bot.sendMessage("problem with port folio")
+
+def add_portfolio(message):
+    try:
+        chat_id = message.chat.id
+        msg = bot.reply_to(message, 'to stop adding stock press N')
+        print(msg.text)
+        print(message)
+        print(msg)
+        if message.text != 'N':
+            bot.register_next_step_handler(msg, add_portfolio)
+        else:
+            bot.register_next_step_handler(msg, show_stock_price)
+    except:
+        bot.sendMessage("problem with stock price")
+
+def show_stock_price(message):
+    try:
+        chat_id = message.chat.id
+        
+        bot.send_message(chat_id, "You can check the real-time price of any stocks. Try 'price ticker_name'")
+        bot.send_message(chat_id,"for stock symbol list please refer:")
+        bot.send_message(chat_id,"https://www.slickcharts.com/sp500",parse_mode='HTML')
+    except:
+        bot.sendMessage("problem with stock price")
 
 def is_price_message(message):
     data = message.text.split()
@@ -120,7 +162,7 @@ def get_stock_price(message):
         print(data.to_string())
         bot.reply_to(message, data['Close'].to_string(header=False))
     else:
-        bot.send_message(message, "No data.")
+        bot.send_message(message, "No data.")   
 
 bot.enable_save_next_step_handlers(delay=2)
 

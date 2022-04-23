@@ -1,0 +1,6 @@
+numpy==1.22.3
+pandas==1.4.2
+pandas_datareader==0.10.0
+pyTelegramBotAPI==4.4.1
+yahoo_fin==0.8.9.1
+yfinance==0.1.70
