@@ -23,6 +23,7 @@ class User:
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
+    print(message.chat.id)
     response = bot.reply_to(message, "Howdy, Nice to Meet You!!\nWhat is your name?")
     bot.register_next_step_handler(response, process_name_step)
 
@@ -97,7 +98,9 @@ def process_salary_step(message):
         salary = message.text
         user = user_dict[chat_id]
         user.salary = salary
-        msg = bot.reply_to(message, 'Have you invested in stocks? Answer: Y or N')
+        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+        markup.add('Yes', 'No')
+        msg = bot.reply_to(message, 'Have you invested in stocks?',reply_markup=markup)
         bot.register_next_step_handler(msg, check_portfolio)
     except Exception as e:
         bot.reply_to(message, 'oooops')
@@ -106,7 +109,7 @@ def check_portfolio(message):
     try:
         chat_id = message.chat.id
         text = message.text
-        if text == 'Y':
+        if text == 'Yes':
             bot.send_message(chat_id, 'what are the stocks you have invested on? ')
             bot.send_message(chat_id, 'Please refer the stock symbols below.')
             bot.send_message(chat_id,"https://www.slickcharts.com/sp500",parse_mode='HTML')
@@ -114,9 +117,12 @@ def check_portfolio(message):
             bot.send_message(chat_id, "stock_symbol units")
             msg = bot.reply_to(message,'EG: amazn 100')
             bot.register_next_step_handler(msg, add_portfolio)
-        elif text == 'N':
+        elif text == 'No':
             msg = bot.reply_to(message,'Nice to meet you')
             bot.register_next_step_handler(msg,show_stock_price)
+        else:
+            msg = bot.reply_to(message, 'Have you invested in stocks?',reply_markup=markup)
+            bot.register_next_step_handler(msg, check_portfolio)
     except:
         bot.sendMessage("problem with port folio")
 
@@ -124,12 +130,12 @@ def add_portfolio(message):
     try:
         chat_id = message.chat.id
         msg = bot.reply_to(message, 'to stop adding stock press N')
-        print(msg.text)
-        print(message)
-        print(msg)
+        print(message.text)
+        print(message.text == 'N') 
         if message.text != 'N':
             bot.register_next_step_handler(msg, add_portfolio)
         else:
+            #Ask next question
             bot.register_next_step_handler(msg, show_stock_price)
     except:
         bot.sendMessage("problem with stock price")
