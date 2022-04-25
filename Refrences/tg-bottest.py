@@ -5,6 +5,7 @@ from yahoo_fin import stock_info as si
 from telebot.callback_data import CallbackData, CallbackDataFilter
 from telebot import types
 import requests
+import json
 
 bot = telebot.TeleBot("5356735903:AAGIUWFapkm7AcpAhyV44n-yojw1Sa3CNl0")
 
@@ -30,8 +31,10 @@ class User:
         self.avail_capital = []
 
     def to_string(self):
-        return {"user_id":self.user_id, "name":self.name,"age":self.age,"sex":self.sex,"email":self.email,"salary":self.salary,"stocksList":self.stocksList,"watchList":self.watchList,"score_risk":self.score_risk}
+        return {"user_id":self.user_id, "name":self.name,"age":self.age,"sex":self.sex,"email":self.email,"salary":self.salary,"stocksList":self.stocksList,"watchList":self.watchList,"score_risk":self.score_risk,"avail_capital":self.avail_capital}
 
+    def test(self):
+        return {"user_id":12354, "name":"test_yatheen","age":23,"sex":"MAle","email":"yatheen@mock.com","salary":"4522","stocksList":[],"watchList":[],"score_risk":7,"avail_capital":1300}
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
@@ -45,8 +48,9 @@ def process_name_step(message):
         name = message.text
         user = User(name,chat_id)
         user_dict[chat_id] = user
+        # response = requests.post("http://192.168.0.157:8001/user/createUser/",json = user.test())
         msg = bot.reply_to(message, 'How old are you?')
-        bot.register_next_step_handler(msg, process_age_step)
+        # bot.register_next_step_handler(msg, process_age_step)
     except Exception as e:
         bot.reply_to(message, 'oooops')
 
@@ -218,7 +222,7 @@ def save_preference(message):
         user.score_risk = user.score_risk + score_dict[message.text]
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
         markup.add('A', 'B','C')
-        msg = bot.send_message(message.chat.id,"5. Due to a general market correction, one of your investments loses 14% \
+        msg = bot.send_message(message.chat.id,"Due to a general market correction, one of your investments loses 14% \
 of its value a short time after you buy it. What do you do?\n A) Sell the investment so you will not have to worry if it\
 continues to decline\n B) Hold on to it and wait for it to climb back up\n C) Buy more of the same investment...because at the\
 current lower price, it looks even better than when you bought it",reply_markup = markup)
@@ -310,8 +314,10 @@ def save_betting_pref(message):
         user = user_dict[message.chat.id]
         user.score_risk = user.score_risk + score_dict[message.text]
         print("before requests")
-        requests.post("http://192.168.0.157:8001/user/createUser/",json = user.to_string())
-        print("After requests")
+        response = requests.post("http://192.168.0.157:8001/user/createUser/",json = user.to_string())
+        response = json.loads(response.text)
+        bot.send_message(message.chat.id,"Your preferences are stored. Use these credentials to login\n\
+userid:"+str(message.chat.id) +"\npassword: "+response['password'])
         msg = bot.reply_to(message, "You can check the real-time price of any stocks. Try 'price ticker_name'\n\
 for stock symbol list please refer:")
         bot.send_message(message.chat.id,"https://www.slickcharts.com/sp500",parse_mode='HTML')
