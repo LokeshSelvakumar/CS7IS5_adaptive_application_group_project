@@ -4,23 +4,34 @@ import yfinance as yf
 from yahoo_fin import stock_info as si
 from telebot.callback_data import CallbackData, CallbackDataFilter
 from telebot import types
+import requests
 
 bot = telebot.TeleBot("5356735903:AAGIUWFapkm7AcpAhyV44n-yojw1Sa3CNl0")
 
 tickers = si.tickers_sp500()
 user_dict = {}
+score_dict = {'A':1,'B':2,'C':3,'D':4,'E':5}
 
 import re
 def valid_email(email):
   return bool(re.search(r"^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$", email))
 
 class User:
-    def __init__(self, name):
+    def __init__(self, name,id):
+        self.user_id = id
         self.name = name
         self.age = None
         self.sex = None
         self.email = None
         self.salary = None
+        self.stocksList = []
+        self.watchList = []
+        self.score_risk = 0
+        self.avail_capital = []
+
+    def to_string(self):
+        return {"user_id":self.user_id, "name":self.name,"age":self.age,"sex":self.sex,"email":self.email,"salary":self.salary,"stocksList":self.stocksList,"watchList":self.watchList,"score_risk":self.score_risk}
+
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
@@ -32,7 +43,7 @@ def process_name_step(message):
     try:
         chat_id = message.chat.id
         name = message.text
-        user = User(name)
+        user = User(name,chat_id)
         user_dict[chat_id] = user
         msg = bot.reply_to(message, 'How old are you?')
         bot.register_next_step_handler(msg, process_age_step)
@@ -99,6 +110,20 @@ def process_salary_step(message):
         salary = message.text
         user = user_dict[chat_id]
         user.salary = salary
+        msg = bot.reply_to(message, 'How much are you interested to invest?')
+        bot.register_next_step_handler(msg, process_avail_capital)
+    except Exception as e:
+        bot.reply_to(message, 'problem with process_salary_step')
+
+def process_avail_capital(message):
+    try:
+        chat_id = message.chat.id
+        user = user_dict[chat_id]
+        if not message.text.isdigit():
+            msg = bot.reply_to(message, 'It should be a number. Enter the amount')
+            bot.register_next_step_handler(msg, process_avail_capital)
+            return
+        user.avail_capital = message.text
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
         markup.add('Yes', 'No')
         msg = bot.reply_to(message, 'Have you invested in stocks?',reply_markup=markup)
@@ -112,8 +137,6 @@ def check_portfolio(message):
         text = message.text
         user = user_dict[chat_id]
         user.stock_invested = text
-        user.stocksList = []
-        user.watchList = []
         if text == 'Yes':
             msg = bot.reply_to(message, 'Lets create a portfolio for you \n\
 To add stock to your portfolio follow the format: <stock_symbol> <units>\n eg: amzn 100\n\
@@ -182,8 +205,9 @@ def save_sector(message):
         user = user_dict[message.chat.id]
         user.sector = message.text
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-        markup.add('Google','Yahoo')
-        msg = bot.reply_to(message,"what is your Source preference? ", reply_markup = markup)
+        markup.add('A', 'B','C','D','E')
+        msg = bot.send_message(message.chat.id,"Over the next several years, you expect your annual income to:\n\
+A) Decrease substantially\nB) Decrease moderately\nC) Stay about the same\nD) Grow moderately\nE) Grow substantially\n",reply_markup = markup)
         bot.register_next_step_handler(msg, save_preference)
     except:
         bot.reply_to(message, "problem with save sector")
@@ -191,14 +215,110 @@ def save_sector(message):
 def save_preference(message):
     try:
         user = user_dict[message.chat.id]
-        user.source_pref = message.text
+        user.score_risk = user.score_risk + score_dict[message.text]
+        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+        markup.add('A', 'B','C')
+        msg = bot.send_message(message.chat.id,"5. Due to a general market correction, one of your investments loses 14% \
+of its value a short time after you buy it. What do you do?\n A) Sell the investment so you will not have to worry if it\
+continues to decline\n B) Hold on to it and wait for it to climb back up\n C) Buy more of the same investment...because at the\
+current lower price, it looks even better than when you bought it",reply_markup = markup)
+        bot.register_next_step_handler(msg,save_investment_risk)
+    except:
+        bot.reply_to(message, "problme with save_preference")
+
+def save_investment_risk(message):
+    try:
+        user = user_dict[message.chat.id]
+        user.score_risk = user.score_risk + score_dict[message.text]
+        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+        markup.add('A', 'B','C')
+        msg = bot.send_message(message.chat.id,"Which of these investing plans would you choose for your investment dollars?\n\
+A) You would go for maximum diversity, dividing your portfolio among all available investments, \
+including those ranging from highest return/greatest risk to lowest return/lowest risk\n\
+B) You are concerned about too much diversification, so you would divide your portfolio among two investments\
+with historically high rates of return and moderate risk\n\
+C) You would put your investment dollars in the investment with the highest rate of return and most risk",reply_markup = markup)
+        bot.register_next_step_handler(msg,save_inv_diversity)
+    except:
+        bot.reply_to(message,"problme with save investment risk")
+
+def save_inv_diversity(message):
+    try:
+        user = user_dict[message.chat.id]
+        user.score_risk = user.score_risk + score_dict[message.text]
+        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+        markup.add('A', 'B','C')
+        msg = bot.send_message(message.chat.id,"Assuming you are investing in a stock, which one do you choose?\n\
+A) 'Blue chip' stocks that pay dividends\n\
+B) Established, well-known companies that have a potential for continued growth\n\
+C) Companies that may make significant technological advances that are still selling at their low initial\
+offering price",reply_markup = markup)
+        bot.register_next_step_handler(msg,save_companies_pref)
+    except:
+        bot.reply_to(message,"problem with saving investments risk")
+
+def save_companies_pref(message):
+    try:
+        user = user_dict[message.chat.id]
+        user.score_risk = user.score_risk + score_dict[message.text]
+        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+        markup.add('A', 'B','C')
+        msg = bot.send_message(message.chat.id,"Assuming you are investing in only one bond, which bond do you choose?\n\
+A)  A tax-free bond, since minimizing taxes is your primary investment objective\n\
+B) The bond of a well-established company that pays a rate of interest somewhere between the other two bonds\n\
+C) A high-yield (junk) bond that pays a higher interest rate than the other two bonds, but also gives\
+you the least sense of security with regard to a possible default",reply_markup = markup)
+        bot.register_next_step_handler(msg,save_bond_pref)
+    except:
+        bot.reply_to(message,"problem with comp_pref")
+
+def save_bond_pref(message):
+    try:
+        user = user_dict[message.chat.id]
+        user.score_risk = user.score_risk + score_dict[message.text]
+        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+        markup.add('A', 'B','C','D')
+        msg = bot.send_message(message.chat.id,"You expect inflation to return and it has been suggested that you invest in\
+'hard' assets, which have historically outpaced inflation. Your only financial assets are long-term bonds. What do you do?\n\
+A) Ignore the advice and hold on to the bonds\n\
+B) Sell the bonds, putting half the proceeds in 'hard' assets and the other half in money market funds\n\
+C) Sell the bonds and put all the proceeds in 'hard' assets\n\
+D) Sell the bonds, put the proceeds in 'hard' assets, and borrow additional money so you can buy even more 'hard' assets",reply_markup = markup)
+        bot.register_next_step_handler(msg,save_risk_longterm_bonds)
+    except:
+        bot.reply_to(message,"problem with bond_pref")
+
+def save_risk_longterm_bonds(message):
+    try:
+        user = user_dict[message.chat.id]
+        user.score_risk = user.score_risk + score_dict[message.text]
+        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+        markup.add('A', 'B','C','D')
+        msg = bot.send_message(message.chat.id,"You have just reached the $10,000 plateau on a TV game show.\n\
+Now you must choose between quitting with the $10,000 in hand or betting the entire $10,000 in one of\
+three alternative scenarios. Which do you choose?\n\
+A) The $10,000 -- you take the money and run\n\
+B) A 50 percent chance of winning $50,000\n\
+C) A 20 percent chance of winning $75,000\n\
+D) A 5 percent chance of winning $100,000",reply_markup = markup)
+        bot.register_next_step_handler(msg,save_betting_pref)
+    except:
+        bot.reply_to(message,"problem with save_risk_longterm_pref")
+
+def save_betting_pref(message):
+    try:
+        user = user_dict[message.chat.id]
+        user.score_risk = user.score_risk + score_dict[message.text]
+        print("before requests")
+        requests.post("http://192.168.0.157:8001/user/createUser/",json = user.to_string())
+        print("After requests")
         msg = bot.reply_to(message, "You can check the real-time price of any stocks. Try 'price ticker_name'\n\
 for stock symbol list please refer:")
         bot.send_message(message.chat.id,"https://www.slickcharts.com/sp500",parse_mode='HTML')
-        bot.register_next_step_handler(msg, get_stock_price)
+
     except:
-        bot.reply_to(message, "problme with save_preference")
-        
+        bot.reply_to(message,"problem with save_betting_pref")
+
 def validate_ticker(ticker_name):
     ticker = yf.Ticker(ticker_name)
     try:
@@ -217,11 +337,11 @@ def is_price_message(message):
         return False
     else:
         return True
+        
 @bot.message_handler(func=is_price_message)
 def get_stock_price(message):
     chat_id = message.chat.id
     user = user_dict[chat_id]
-    print(user.stocksList)
     request_ticker = message.text.split()[1]
     validBool = validate_ticker(request_ticker)
     if not validBool:
