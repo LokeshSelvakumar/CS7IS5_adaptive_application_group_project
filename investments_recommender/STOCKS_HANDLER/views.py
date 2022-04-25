@@ -3,9 +3,13 @@ import yfinance as yf
 from yahoo_fin import stock_info as si
 from django.http import JsonResponse
 import pandas as pd
+from firebase_admin import db
+import json
+import pandas as pd
 # Create your views here.
 
 tickers = si.tickers_sp500()
+stocks_data = pd.read_csv('STOCKS_HANDLER/Stocks_data.csv')
 
 def display_stocks(request):
     #This list has to be generated dynamically based on user preference.
@@ -41,21 +45,33 @@ def gather_stocks_data(request):
 #     'age' : 20,
 #     'risk_preference': 'low_risk'
 # }
-def recommend_stocks(stocks_data,user_data):
+def recommend_stocks(request):
+    user_data = json.loads(request.body)
+    user_id = str(user_data['user_id'])
+    user_data = db.reference("/Users").get(user_id)[0][user_id]
+    print(user_id)
     #Get the sector preference of the user
-    intrested_sectors = user_data['sector_preference']
+    intrested_sectors = user_data['sector_preference'][:3]
     data = []
     for sector in intrested_sectors:
         print(f"[INFO] RECOMMENDING STOCKS IN {sector}")
         stocks = stocks_data[
             (stocks_data['sector'] == sector) & 
             (stocks_data['Risk_Factor'] == user_data['risk_preference']) & 
-            (stocks_data['currentPrice'] <= user_data['available_captial'])
+            (stocks_data['currentPrice'] <= user_data['available_capital'])
         ]
         recommended_stocks = stocks.sort_values(by=['profitMargins'],ascending=False)
-        target_columns = ['sector','Risk_Factor','currentPrice','profitMargins']
+        target_columns = ['symbol','sector','Risk_Factor','currentPrice','profitMargins']
         recommended_stocks = recommended_stocks[target_columns]
-        data.append(recommend_stocks)
+        recommended_stocks = recommended_stocks.head(3)
+        data.append(recommended_stocks)
     recommendations = pd.concat(data)
+    recommendations_json = recommendations.to_json(orient='split')
     #Todo:Return a subset of recommendations.
-    return recommendations
+    return JsonResponse({"status":True,"recommendations":json.loads(recommendations_json)},safe=False)
+
+
+def suggest_day_gainers():
+    data = si.get_day_gainers()
+    #Add filtering here
+    return data.head()
