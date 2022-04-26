@@ -18,5 +18,6 @@ from django.urls import path,include
 from . import views
 
 urlpatterns = [
-    path("display/",views.display_stocks)
+    path("display/",views.display_stocks),
+    path("recommend/",views.recommend_stocks)
 ]
