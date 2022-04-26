@@ -48,7 +48,7 @@ def process_name_step(message):
         name = message.text
         user = User(name,chat_id)
         user_dict[chat_id] = user
-        # response = requests.post("http://192.168.0.157:8001/user/createUser/",json = user.test())
+        response = requests.post("http://192.168.0.157:8001/user/createUser/",json = user.test())
         msg = bot.reply_to(message, 'How old are you?')
         # bot.register_next_step_handler(msg, process_age_step)
     except Exception as e:
