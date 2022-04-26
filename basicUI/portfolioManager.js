@@ -73,6 +73,21 @@ function addStock(ticker){
 
 function appendNews(){ 
     //from API response (iterate through)
+    fetch('http://127.0.0.1:8000/news/display/',
+    {
+        mode: 'cors',
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({user_id: 12354})
+    }).then(response => {
+        return response.json();
+    }).then(data => {
+        console.log(data);
+    });
+
     var link = "";
     var article = "News Article";
 
