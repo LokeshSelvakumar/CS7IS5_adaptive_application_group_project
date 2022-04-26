@@ -3,29 +3,36 @@ from firebase_admin import db
 from firebase_admin import credentials
 import os
 
-privatekeypath = os.path.join(os.getcwd(),'')
+privatekeypath = os.path.join(os.getcwd(),'investments_recommender')
+privatekeypath = os.path.join(privatekeypath,'static')
 privPath = os.path.join(privatekeypath,'privateKey.json')
 cred_obj = credentials.Certificate(privPath)
 
 default_app = firebase_admin.initialize_app(cred_obj, {
-    'databaseURL': 'https://investment-recommender-default-rtdb.europe-west1.firebasedatabase.app/'
+'databaseURL': 'https://adaptive-application-default-rtdb.firebaseio.com/'
 })
 # ref = db.reference("/Users")
 # ref = db.reference("/Reference")
 
 
-def save_user(user_id, name, age, gender, email, occupation="", salary=""):
-    ref = db.reference("/Users")
-    ref.update({
-        user_id: {
-            "Name": name,
-            "Age":  age,
-            "Gender": gender,
-            "Email": email,
-            "Occupation": occupation,
-            "Salary Range": salary
-        }
-    })
+def save_user(user):
+    try:
+        ref = db.reference("/Users")
+        ref.update({
+            user['user_id']: {
+                "Name": user['name'],
+                "Age":  user['age'],
+                "Gender": user['gender'],
+                "Email": user['email'],
+                "Occupation": user['occupation'],
+                "Salary Range": user['salary'],
+                "sector_preference": user['user_id'],
+            }
+        })
+        return True
+    except Exception as e:
+        print(e)
+        return False
 
 
 def save_reference(user_id, reference="", knowledge="", news="", stock=""):
