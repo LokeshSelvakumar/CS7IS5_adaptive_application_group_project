@@ -38,5 +38,5 @@ def display_news(request):
         data = response.json()
 
         articles = data["articles"]
-        news_data = json.loads(articles)
+        news_data = json.dumps(articles, indent=4)
     return JsonResponse({"status":200,"news":news_data})
