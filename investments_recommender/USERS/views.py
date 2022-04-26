@@ -59,7 +59,7 @@ def verify_user(request):
     if user_id in users.keys():
         isVerifiedUser = (users[user_id]['password'] == password)
         if isVerifiedUser:
-            return JsonResponse({"status":True,"user_data":users[user_id]},safe=False)
+            return JsonResponse({"status":True,"user_data":users[user_id],"user_id":user_id},safe=False)
         else:
             return JsonResponse({"status":False})
     else:
