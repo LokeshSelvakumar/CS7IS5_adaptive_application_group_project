@@ -37,22 +37,46 @@ $('document').ready(function(){
     $('#login').click(function(event){
         var username = $('#username-input');
         var password = $('#password-input');
+        handleLogin(username, password);
+    
         if(username != "" && password != ""){
-            handleLogin(username, password);
+            //handleLogin(username, password);
         }
     });
 });
 
 function handleLogin(username, password){
-    //login request to backend, on success store username and redirect
-    window.localStorage.setItem("user", username);
-    window.location.href = "index.html";
+    //login request to backend, on success store username and age and redirect
+    fetch('http://127.0.0.1:8000/user/verify/',
+    {
+        mode: 'cors',
+        method: 'POST',
+        body: JSON.stringify({user_id: 12354, password: '93V)i'})
+    }).then(response => {
+        return response.json();
+    }).then(data => {
+        console.log(data.user_data);
+        if(data.status == true){
+            console.log("login successful");
+            localStorage.setItem('age', data.user_data.Age.toString());
+            localStorage.setItem('user', data.user_data.Name);
+            //window.location.href = "index.html";
+        }
+    });
 }
 
 function getNews(){
     console.log('getting news');
-    //call backend first
-    appendNews();
+    fetch('http://127.0.0.1:8000/news/display/',
+    {
+        mode: 'cors',
+        method: 'POST',
+        body: JSON.stringify({user_id: 12354})
+    }).then(response => {
+        return response.json();
+    }).then(data => {
+        appendNews(JSON.parse(data.news));
+    });
 }
 
 function getStocks(){
@@ -71,39 +95,24 @@ function addStock(ticker){
     appendStocks(ticker);
 }
 
-function appendNews(){ 
-    //from API response (iterate through)
-    fetch('http://127.0.0.1:8000/news/display/',
-    {
-        mode: 'cors',
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({user_id: 12354})
-    }).then(response => {
-        return response.json();
-    }).then(data => {
-        console.log(data);
+function appendNews(news){
+    console.log(news);
+    news.forEach(article => {
+        var link = article.url;
+        var article_name = article.title;
+    
+        var linkHtml = '<a target="_blank" href="' + link + '" class="text-dark">'; 
+        var news = '<div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"> <strong class="new-news">' + article_name + '</strong></p>';
+    
+        var item = linkHtml + news;
+    
+        $('#news').append(item);
     });
-
-    var link = "";
-    var article = "News Article";
-
-    var linkHtml = '<a target="_blank" href="' + link + '" class="text-dark">'; 
-    var news = '<div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"> <strong class="new-news">' + article + '</strong></p>';
-
-    var item = linkHtml + news;
-
-    $('#news').append(item);
     adjustNewsStyle();
 }
 
 function appendStocks(stock){
     // from API call (iterate through)
-    //var stock = "Stock";
-    console.log(STOCK_NAMES.includes('American Airlines Group Inc. Common Stock'));
     if(stock != undefined && stock != '' && STOCK_NAMES.includes(stock)){
         var item = '<div class="text-dark"> <div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"><strong class="new-stock">' + stock + '</strong></p></div></div></div>';
         $('#stocks').append(item);
