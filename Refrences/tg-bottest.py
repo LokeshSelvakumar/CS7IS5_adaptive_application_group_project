@@ -376,44 +376,6 @@ def get_stock_price(message):
     else:
         bot.send_message(message, "No data.")
 
-# Topics that can be queried: 'business', 'technology', 'science', 'entertainment', 'health', 'sports'
-def get_user_preference_news(message):
-    try:
-        chat_id = message.chat.id
-        user = user_dict[chat_id]
-        # Get news of interest to users
-        ref = user.reference
-        API_KEY = 'fb3a5891a786455bb898f36e92b09f24'
-
-        # Get news according to users' different topics of interest, displaying news items(title) per topic
-        for item in ref:
-            bot.send_message(item + ":")
-            params = {
-                # 'q': '',
-                'source': 'bbc-news',
-                'sortBy': 'relevancy',
-                'language': 'en',
-                'category': item,
-                # 'country': 'us',
-                # 'apiKey': API_KEY,
-            }
-
-            headers = {
-                'X-Api-Key': API_KEY,  # KEY in header to hide it from url
-            }
-
-            url = 'https://newsapi.org/v2/top-headlines'
-
-            response = requests.get(url, params=params, headers=headers)
-            data = response.json()
-
-            articles = data["articles"]
-            results = [arr["title"] for arr in articles]
-            for i, arr in enumerate(results, 1):
-                print(i, arr)
-                bot.send_message(i, arr)
-    except:
-        bot.send_message("No data.")
 
 bot.enable_save_next_step_handlers(delay=2)
 
