@@ -9,16 +9,17 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
         <script src="portfolioManager.js"></script>
+        <script src="adaptations.js"></script>
 
         <script>
+          //check if logged in
           if(localStorage.getItem("user") == '' && window.location.href == 'http://127.0.0.1:5500/CS7IS5_adaptive_application_group_project/basicUI/index.html'){
               window.location.href = 'login.html';
           }
-
         </script>
     </head>
 
-    <body class="p-5 bg-info">
+    <body id='body' class="p-5">
       <!-- ✅ load jQuery ✅ -->
       <script
       src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -49,7 +50,8 @@
                 <!-- News block -->          
                   <div class="row mb-3">
                     <div class="col-6">
-                      <div class="text-info">
+                      <!--Colour-->
+                      <div id="news-title" class="fs-1">
                         <i class="fa-solid fa-newspaper"></i>
                         News
                       </div>
@@ -62,8 +64,9 @@
               <div class="row">
                   <div class="col-sm">
                       <div id='stocks' class="card px-3 pt-3" style="max-width: 32rem">
-                        <!-- Stocks block -->                        
-                        <div class="text-info">
+                        <!-- Stocks block -->     
+                        <!--Colour-->
+                        <div id="stocks-title">
                             <i class="fa-solid fa-arrow-trend-up"></i>
                             Your Stocks
                         </div>
@@ -76,7 +79,8 @@
                   <div class="col-sm">
                       <div id='stock-recs' class="card px-3 pt-3 mt-3" style="max-width: 32rem">
                         <!-- Stocks block -->
-                        <div class="text-info">
+                        <!--Colour-->
+                        <div id="rec-title">
                             <i class="fa-solid fa-arrow-trend-up"></i>
                             Recommended Stocks
                         </div>
