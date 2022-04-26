@@ -11,7 +11,7 @@ def display_news(request):
     user_id = str(user_data['user_id'])
     ref = db.reference("/Users")
     users = ref.get()
-    ref = users[user_id]['sector_reference']
+    ref = users[user_id]['sector_preference']
 
     # Get news of interest to users
     API_KEY = 'fb3a5891a786455bb898f36e92b09f24'
@@ -38,5 +38,5 @@ def display_news(request):
         data = response.json()
 
         articles = data["articles"]
-        news_data = json.loads(articles)
+        news_data = json.dumps(articles, indent=4)
     return JsonResponse({"status":200,"news":news_data})
