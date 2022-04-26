@@ -58,5 +58,9 @@ def verify_user(request):
     print(users[user_id]['password'])
     if user_id in users.keys():
         isVerifiedUser = (users[user_id]['password'] == password)
-    return JsonResponse({"status":isVerifiedUser})
-
+        if isVerifiedUser:
+            return JsonResponse({"status":True,"user_data":users[user_id]},safe=False)
+        else:
+            return JsonResponse({"status":False})
+    else:
+        return JsonResponse({"status":False})
