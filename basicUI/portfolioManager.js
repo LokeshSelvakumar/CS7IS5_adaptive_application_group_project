@@ -5,33 +5,38 @@ var userWatchist = [];
 //localStorage.setItem('age', '22');
 
 $('document').ready(function(){
+    //loading UI
     if(window.location.href == 'http://127.0.0.1:5500/CS7IS5_adaptive_application_group_project/basicUI/index.html'){
         userAge = parseInt(localStorage.getItem('age'));
         
         adjustColor();
         adjustFontSize();
-
+        
+        //get ticker -> company name mapping
         $.getJSON('stocks_mapping.json', function(data){
             stocks_mapping = data;
             stock_names = Object.values(stocks_mapping);
-            console.log(stock_names);
-        });
-
-        // autocomplete for searchbar
-        $('#stock-searchbar').autocomplete({
-            source: stock_names
+            console.log(stock_names.length);
+            
+            // autocomplete for searchbar
+            $('#stock-searchbar').autocomplete({
+                source: stock_names
+            });
         });
 
         // submit event for searching stock
         $('#search-form').submit(function(event){
             event.preventDefault();
             var stockName = $('#stock-searchbar').val();
+            
             // get ticker from stock name
             for(var [key, value] of Object.entries(stocks_mapping)){
                 if(value == stockName){
                     addStock(stockName, key, true);
                 }
-            } 
+            }
+
+            //clear searchbar 
             $('#stock-searchbar').val('');
         });
 
@@ -40,6 +45,7 @@ $('document').ready(function(){
         getStockRecs();
     }
 
+    // login event
     $('#login').click(function(event){
         var username = $('#username-input').val();
         var password = $('#password-input').val();    
@@ -59,7 +65,6 @@ function handleLogin(username, password){
     }).then(response => {
         return response.json();
     }).then(data => {
-        //console.log(data.user_data);
         if(data.status == true){
             console.log("login successful");
             localStorage.setItem('age', data.user_data.Age.toString());
@@ -70,6 +75,7 @@ function handleLogin(username, password){
 }
 
 function getNews(){
+    //request to get user's news
     console.log('getting news');
     fetch('http://127.0.0.1:8000/news/display/',
     {
@@ -119,22 +125,16 @@ function getStockRecs(){
     }).then(data => {
         console.log(data.recommendations.data);
         data.recommendations.data.forEach(rec => {
-            var ticker = rec[0];
-            var sector = rec[1];
-            var risk = rec[2];
-            var price = rec[3];
-            var profit = rec[4];
-            var name = stocks_mapping[ticker];
-            var disableButton = userWatchist.includes(ticker);
-            appendStockRec(name, ticker, sector, risk, price, profit, disableButton);
+            var name = stocks_mapping[rec[0]];
+            var disableButton = userWatchist.includes(rec[0]);
+            appendStockRec(rec, name, disableButton);
         });
     });   
 }
 
 function addStock(stock, ticker, fromSearchBar){
-    // api call 
+    // add new stock to user's watchlist
     console.log("adding stock: " + stock);
-    console.log(fromSearchBar);
     fetch('http://127.0.0.1:8000/stocks/addstock/',
     {
         mode: 'cors',
@@ -143,21 +143,14 @@ function addStock(stock, ticker, fromSearchBar){
     }).then(response => {
         return response.json();
     }).then(data => {
-        console.log(data);
         if(data.status == true){
-            appendWatchlist(stock);
-            if(!fromSearchBar){
-                //remove from list
-                var recNode = document.getElementById("rec-" + ticker);
-                if(recNode){
-                    recNode.remove();
-                }
-            }
+            window.location.reload();
         }
     });   
 }
 
 function appendNews(news){
+    //append news to UI
     console.log(news);
     news.forEach(article => {
         var link = article.url;
@@ -174,6 +167,7 @@ function appendNews(news){
 }
 
 function appendStock(stock, price, value){
+    //append new stock to UI
     if(stock != undefined && stock != '' && stock_names.includes(stock)){
         var item = '<div class="text-dark"><div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"><strong class="new-stock">' + stock + '</strong><br><p><b>Current Price:</b> ' + price + '<br><b>Current Value:</b> ' + value + '</p></p></div></div></div>';
         $('#stocks').append(item);
@@ -181,7 +175,8 @@ function appendStock(stock, price, value){
     adjustStockStyle();
 }
 
-function appendWatchlist(stock, price, value){
+function appendWatchlist(stock, price){
+    //append new stock to watchlist
     if(stock != undefined && stock != '' && stock_names.includes(stock)){
         var item = '<div class="text-dark"><div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"><strong class="new-stock">' + stock + '</strong><br><p><b>Current Price:</b> ' + price + '</p></p></div></div></div>';
         $('#watchlist').append(item);
@@ -189,17 +184,18 @@ function appendWatchlist(stock, price, value){
     adjustStockStyle();
 }
 
-function appendStockRec(stock, ticker, sector, risk, price, profit, disableButton){
-    var nameParam = "'" + stock + "'";
-    var tickerParam = "'" + ticker + "'";
-    if(risk == "low_risk"){
-        risk = "low risk";
+function appendStockRec(stock, name, disableButton){
+    //append recommendation to watchlist
+    var nameParam = "'" + name + "'";
+    var tickerParam = "'" + stock[0] + "'";
+    if(stock[2] == "low_risk"){
+        stock[2] = "low risk";
     }
     
-    var item = '<div id="rec-' + ticker + '" class="text-dark"><div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"><strong>' + stock + '</strong><br><p><b>Sector:</b> ' + sector + '<br><b>Risk:</b> ' + risk + '<br><b>Current Price:</b> ' + price + '<br><b>Profit Margins:</b> ' + profit + '</p>';
+    var item = '<div class="text-dark"><div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"><strong>' + stock + '</strong><br><p><b>Sector:</b> ' + stock[1] + '<br><b>Risk:</b> ' + stock[2] + '<br><b>Current Price:</b> ' + stock[3] + '<br><b>Profit Margins:</b> ' + stock[4] + '</p>';
 
     if(!disableButton){
-        item += '<button onclick="addStock(' + nameParam + ',' + tickerParam + ', false)" type="button" class="add-btn cursor-pointer">Add to Watchlist</button></div></div></div>'
+        item += '<button id="btn-' + stock[0] + '" onclick="addStock(' + nameParam + ',' + tickerParam + ', false)" type="button" class="add-btn cursor-pointer">Add to Watchlist</button></div></div></div>'
     }
     else{
         item += '</div></div></div>';

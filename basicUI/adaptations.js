@@ -1,4 +1,5 @@
 function adjustColor(){
+    //adapt color scheme by age
     if(userAge <= 30){
         //blue
         $('#body').addClass('bg-info');
@@ -26,6 +27,7 @@ function adjustColor(){
 }
 
 function adjustFontSize(){
+    //adapt font size by age
     if(userAge <= 30){
         //blue
         $('#news-title').css('font-size', '16px');
@@ -50,6 +52,7 @@ function adjustFontSize(){
 }
 
 function adjustRecStyle(){
+    //adapt style of recommendations by age
     if(userAge <= 30){
         //blue
         $('.add-btn').addClass('btn btn-primary');
@@ -71,6 +74,7 @@ function adjustRecStyle(){
 }
 
 function adjustStockStyle(){
+    //adapt stock style by age
     if(userAge <= 30){
         //blue
         $('.new-stock').css('font-size', '16px');
@@ -86,6 +90,7 @@ function adjustStockStyle(){
 }
 
 function adjustNewsStyle(){
+    //adapt news style by age
     if(userAge <= 30){
         //blue
         $('.new-news').css('font-size', '16px');
