@@ -194,7 +194,7 @@ function appendStockRec(stock, name, disableButton){
         stock[2] = "low risk";
     }
     
-    var item = '<div class="text-dark"><div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"><strong>' + name + '</strong><br><p><b>Sector:</b> ' + stock[1] + '<br><b>Risk:</b> ' + stock[2] + '<br><b>Current Price:</b> ' + stock[3] + '<br><b>Profit Margins:</b> ' + stock[4] + '</p>';
+    var item = '<div class="text-dark"><div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"><strong class="rec-name">' + name + '</strong><br><p class="rec-info"><b>Sector:</b> ' + stock[1] + '<br><b>Risk:</b> ' + stock[2] + '<br><b>Current Price:</b> ' + stock[3] + '<br><b>Profit Margins:</b> ' + stock[4] + '</p>';
 
     if(!disableButton){
         item += '<button id="btn-' + stock[0] + '" onclick="addStock(' + nameParam + ',' + tickerParam + ', false)" type="button" class="add-btn cursor-pointer">Add to Watchlist</button></div></div></div>'

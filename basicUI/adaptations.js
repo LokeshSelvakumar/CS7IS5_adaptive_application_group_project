@@ -58,18 +58,24 @@ function adjustRecStyle(){
         $('.add-btn').addClass('btn btn-primary');
         $('.add-btn').css('font-size', '16px');
         $('.new-rec').css('font-size', '16px');
+        $('.rec-info').css('font-size', '16px');
+        $('.rec-name').css('font-size', '16px');
     }
     else if(userAge > 30 && userAge <= 50){
         //green
         $('.add-btn').addClass('btn btn-warning');
         $('.add-btn').css('font-size', '18px');
         $('.new-rec').css('font-size', '18px');
+        $('.rec-info').css('font-size', '18px');
+        $('.rec-name').css('font-size', '18px');
     }
     else if(userAge > 50 && userAge <= 70){
         //red
         $('.add-btn').addClass('btn btn-dark');
         $('.add-btn').css('font-size', '19px');
         $('.new-rec').css('font-size', '19px');
+        $('.rec-info').css('font-size', '19px');
+        $('.rec-name').css('font-size', '19px');
     }
 }
 
