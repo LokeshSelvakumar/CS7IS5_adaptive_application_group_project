@@ -105,6 +105,8 @@ class User:
         result['available_capital'] = self.available_capital
         result['risk_preference'] = self.risk_preference
         result['password'] = self.password
+        result['stocksList'] = self.stockslist
+        result['watchList'] = self.watchlist
         return result
         
         

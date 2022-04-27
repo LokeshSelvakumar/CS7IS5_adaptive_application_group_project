@@ -79,22 +79,41 @@ def suggest_day_gainers():
     #Add filtering here
     return data.head()
 
-# function to display stocks from stocksdata.csv based on the preferences
-def display_stocks_basedon_preference(request):
+def get_user_stocks(request):
     user_data = json.loads(request.body)
     user_id = str(user_data['user_id'])
-    user =  db.reference("/Users").get(user_id)[0][user_id]
-    #Get the sector preference of the user
-    intrested_sectors = user_data['sector_preference']
-    data =[]
-    for sector in intrested_sectors:
-        print(f"[INFO] RECOMMENDING STOCKS IN {sector}")
-        stocks = stocks_data[(stocks_data['sector'] == sector)]
+    user_data = db.reference("/Users").get(user_id)[0][user_id]
+    
+    #Process the user stocklist
+    stocklist = {}
+    for item in user_data['stockslist']:
+        values = item.split(" ")
+        stocklist[values[0].upper()] = float(values[1])
+    stocks = stocks_data[stocks_data['symbol'].isin(stocklist.keys())]
+    user_stocks = []
+    for _,row in stocks.iterrows():
+        name = row['symbol']
+        currentPrice = row['currentPrice']
+        currentValue = stocklist[name] * currentPrice
+        currentValue = round(currentValue, 2)
+        user_stocks.append({
+            'Stock':name,
+            'Current Price':currentPrice,
+            'Current Value':currentValue,
+        })
 
-        result_stocks = stocks.sort_values(by=['profitMargins'],ascending=False)
-        result_stocks = result_stocks['symbol'].head(3)
-        data.append(result_stocks)
-    result = pd.concat(data)
-    result_json = result.to_json(orient='split')
-    #Todo:Return a subset of recommendations.
-    return JsonResponse({"status":True,"recommendations":json.loads(result_json)},safe=False)
+    #Process the user watchlist
+    user_watchlist = []
+    watchlist = user_data['watchlist']
+    for i in range(len(watchlist)):
+        watchlist[i] = watchlist[i].upper()
+    stocks = stocks_data[stocks_data['symbol'].isin(watchlist)]
+    for _,row in stocks.iterrows():
+        name = row['symbol']
+        currentPrice = row['currentPrice']
+        user_watchlist.append({
+            'Stock':name,
+            'Current Price':currentPrice,
+        })
+    
+    return JsonResponse({"status":True,"user_stocks":user_stocks,"user_watchlist":user_watchlist},safe=False)
