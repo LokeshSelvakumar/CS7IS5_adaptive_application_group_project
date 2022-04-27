@@ -1,7 +1,7 @@
 var stocks_mapping = {};
 var stock_names = []
 var userAge = -1;
-var userWatchist = [];
+var userWatchlist = [];
 //localStorage.setItem('age', '22');
 
 $('document').ready(function(){
@@ -42,7 +42,9 @@ $('document').ready(function(){
 
         getNews();
         getStocks();
-        getStockRecs();
+        setTimeout(function(){
+            getStockRecs();
+        }, 1000);
     }
 
     // login event
@@ -106,7 +108,7 @@ function getStocks(){
         });
 
         data.user_watchlist.forEach(stock => {
-            userWatchist.push(stock.Stock);
+            userWatchlist.push(stock.Stock);
             appendWatchlist(stocks_mapping[stock.Stock], stock['Current Price']);
         })
     });   
@@ -126,13 +128,13 @@ function getStockRecs(){
         console.log(data.recommendations.data);
         data.recommendations.data.forEach(rec => {
             var name = stocks_mapping[rec[0]];
-            var disableButton = userWatchist.includes(rec[0]);
+            var disableButton = userWatchlist.includes(rec[0]);
             appendStockRec(rec, name, disableButton);
         });
     });   
 }
 
-function addStock(stock, ticker, fromSearchBar){
+function addStock(stock, ticker){
     // add new stock to user's watchlist
     console.log("adding stock: " + stock);
     fetch('http://127.0.0.1:8000/stocks/addstock/',
@@ -192,7 +194,7 @@ function appendStockRec(stock, name, disableButton){
         stock[2] = "low risk";
     }
     
-    var item = '<div class="text-dark"><div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"><strong>' + stock + '</strong><br><p><b>Sector:</b> ' + stock[1] + '<br><b>Risk:</b> ' + stock[2] + '<br><b>Current Price:</b> ' + stock[3] + '<br><b>Profit Margins:</b> ' + stock[4] + '</p>';
+    var item = '<div class="text-dark"><div class="row mb-4 border-bottom pb-2"><div class="col-9"><p class="mb-2"><strong>' + name + '</strong><br><p><b>Sector:</b> ' + stock[1] + '<br><b>Risk:</b> ' + stock[2] + '<br><b>Current Price:</b> ' + stock[3] + '<br><b>Profit Margins:</b> ' + stock[4] + '</p>';
 
     if(!disableButton){
         item += '<button id="btn-' + stock[0] + '" onclick="addStock(' + nameParam + ',' + tickerParam + ', false)" type="button" class="add-btn cursor-pointer">Add to Watchlist</button></div></div></div>'
