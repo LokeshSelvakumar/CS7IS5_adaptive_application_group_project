@@ -1,9 +1,20 @@
+import requests
 from django.shortcuts import render
 from django.http import JsonResponse
-from .financial_news import *
-from firebase_admin import db
+# from .financial_news import *
 import json
+import firebase_admin
+from firebase_admin import db
+from firebase_admin import credentials
+import os
 
+privatekeypath = os.path.dirname(os.getcwd())
+privatekeypath = os.path.join(privatekeypath,'investments_recommender/static/privateKey.json')
+cred_obj = credentials.Certificate(privatekeypath)
+
+default_app = firebase_admin.initialize_app(cred_obj, {
+'databaseURL': 'https://adaptive-application-default-rtdb.firebaseio.com/'
+})
 # Create your views here.
 # Topics that can be queried: 'business', 'technology', 'science', 'entertainment', 'health', 'sports'
 def display_news(request):
