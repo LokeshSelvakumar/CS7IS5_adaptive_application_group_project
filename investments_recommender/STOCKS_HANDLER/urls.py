@@ -21,4 +21,5 @@ urlpatterns = [
     path("display/",views.display_stocks),
     path("recommend/",views.recommend_stocks),
     path("userstocks/",views.get_user_stocks),
+    path("addstock/",views.add_stock_to_watchlist),
 ]
