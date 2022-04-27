@@ -1,6 +1,7 @@
+import requests
 from django.shortcuts import render
 from django.http import JsonResponse
-from .financial_news import *
+# from .financial_news import *
 import json
 import firebase_admin
 from firebase_admin import db
