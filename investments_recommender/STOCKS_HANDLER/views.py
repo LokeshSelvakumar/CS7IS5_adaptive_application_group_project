@@ -22,11 +22,14 @@ def display_stocks(request):
     return JsonResponse({"status":200,"data":result})
 
 #Time consuming task - add it to a scheduler
-def gather_stocks_data(request):
-    stock_price_data = yf.Tickers(tickers)
+def gather_stocks_data():
+    print('here')
+    tick = si.tickers_sp500()
+    print(tick)
+    stock_price_data = yf.Tickers(tick[0])
     result = {}
-    for key,tickers in stock_price_data.tickers.items():
-        result[key] = tickers.info
+    for key,ticker in stock_price_data.tickers.items():
+        result[key] = ticker.info
     stocks_data = pd.DataFrame.from_dict(result)
     stocks_data = stocks_data.T
     target_columns = ['sector', 'longBusinessSummary', 'website', 'industry', 'profitMargins', 'grossMargins', 'operatingCashflow', 'revenueGrowth',  'recommendationKey', 'freeCashflow', 'currentPrice',  'debtToEquity', 'returnOnEquity','recommendationMean', 'symbol','beta','threeYearAverageReturn']
