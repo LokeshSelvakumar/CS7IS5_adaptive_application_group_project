@@ -5,6 +5,7 @@ function adjustColor(){
         $('#news-title').addClass('text-info');
         $('#stocks-title').addClass('text-info');
         $('#rec-title').addClass('text-info');
+        $('#watchlist-title').addClass('text-info');
     }
     else if(userAge > 30 && userAge <= 50){
         //green
@@ -12,6 +13,7 @@ function adjustColor(){
         $('#news-title').addClass('text-success');
         $('#stocks-title').addClass('text-success');
         $('#rec-title').addClass('text-success');
+        $('#watchlist-title').addClass('text-success');
     }
     else if(userAge > 50){
         //red
@@ -19,6 +21,7 @@ function adjustColor(){
         $('#news-title').addClass('text-danger');
         $('#stocks-title').addClass('text-danger');
         $('#rec-title').addClass('text-danger');
+        $('#watchlist-title').addClass('text-danger');
     }
 }
 
@@ -28,18 +31,21 @@ function adjustFontSize(){
         $('#news-title').css('font-size', '16px');
         $('#stocks-title').css('font-size', '16px');
         $('#rec-title').css('font-size', '16px');
+        $('#watchlist-title').css('font-size', '16px');
     }
     else if(userAge > 30 && userAge <= 50){
         //green
         $('#news-title').css('font-size', '20px');
         $('#stocks-title').css('font-size', '20px');
         $('#rec-title').css('font-size', '20px');
+        $('#watchlist-title').css('font-size', '20px');
     }
     else if(userAge > 50 && userAge <= 70){
         //red
         $('#news-title').css('font-size', '25px');
         $('#stocks-title').css('font-size', '25px');
         $('#rec-title').css('font-size', '25px');
+        $('#watchlist-title').css('font-size', '25px');
     }
 }
 
