@@ -75,3 +75,42 @@ def suggest_day_gainers():
     data = si.get_day_gainers()
     #Add filtering here
     return data.head()
+
+def get_user_stocks(request):
+    user_data = json.loads(request.body)
+    user_id = str(user_data['user_id'])
+    user_data = db.reference("/Users").get(user_id)[0][user_id]
+    
+    #Process the user stocklist
+    stocklist = {}
+    for item in user_data['stockslist']:
+        values = item.split(" ")
+        stocklist[values[0].upper()] = float(values[1])
+    stocks = stocks_data[stocks_data['symbol'].isin(stocklist.keys())]
+    user_stocks = []
+    for _,row in stocks.iterrows():
+        name = row['symbol']
+        currentPrice = row['currentPrice']
+        currentValue = stocklist[name] * currentPrice
+        currentValue = round(currentValue, 2)
+        user_stocks.append({
+            'Stock':name,
+            'Current Price':currentPrice,
+            'Current Value':currentValue,
+        })
+
+    #Process the user watchlist
+    user_watchlist = []
+    watchlist = user_data['watchlist']
+    for i in range(len(watchlist)):
+        watchlist[i] = watchlist[i].upper()
+    stocks = stocks_data[stocks_data['symbol'].isin(watchlist)]
+    for _,row in stocks.iterrows():
+        name = row['symbol']
+        currentPrice = row['currentPrice']
+        user_watchlist.append({
+            'Stock':name,
+            'Current Price':currentPrice,
+        })
+    
+    return JsonResponse({"status":True,"user_stocks":user_stocks,"user_watchlist":user_watchlist},safe=False)

@@ -30,10 +30,13 @@ def save_user_to_fb(user):
                 "available_capital": user['available_capital'],
                 "risk_preference": user['risk_preference'],
                 "password": user['password'],
+                "stockslist": user['stocksList'],
+                "watchlist": user['watchList'],
             }
         })
         return True
-    except:
+    except Exception as e:
+        print(e)
         return False
 
 def create_user(request):
