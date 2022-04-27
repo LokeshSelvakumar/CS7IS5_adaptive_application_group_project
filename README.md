@@ -17,3 +17,6 @@ The frontend is run on VSCode using [Live Server](https://marketplace.visualstud
 - Open webpage at http://127.0.0.1:5500/CS7IS5_adaptive_application_group_project/basicUI/login.html
 
 **Sample Login:**<br> user: "1950809226",  password: "2H1Fk"
+
+gmail: bullfinchadaptiveapp@gmail.com
+password : Bullneverflinch$
