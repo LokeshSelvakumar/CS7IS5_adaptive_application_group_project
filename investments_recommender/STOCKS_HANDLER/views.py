@@ -61,7 +61,7 @@ def recommend_stocks(request):
         stocks = stocks_data[
             (stocks_data['sector'] == sector) & 
             (stocks_data['Risk_Factor'] == user_data['risk_preference']) & 
-            (stocks_data['currentPrice'] <= user_data['available_capital'])
+            (stocks_data['currentPrice'] <= float(user_data['available_capital']))
         ]
         recommended_stocks = stocks.sort_values(by=['profitMargins'],ascending=False)
         target_columns = ['symbol','sector','Risk_Factor','currentPrice','profitMargins']

@@ -28,26 +28,25 @@ def display_news(request):
     API_KEY = 'fb3a5891a786455bb898f36e92b09f24'
 
     # Get news according to users' different topics of interest, displaying news items(title) per topic
-    for item in ref:
-        params = {
-            # 'q': '',
-            'source': 'bbc-news',
-            'sortBy': 'relevancy',
-            'language': 'en',
-            'category': item,
-            # 'country': 'us',
-            # 'apiKey': API_KEY,
-        }
+    params = {
+        # 'q': '',
+        'source': 'bbc-news',
+        'sortBy': 'relevancy',
+        'language': 'en',
+        'category': ref[0],
+        # 'country': 'us',
+        # 'apiKey': API_KEY,
+    }
 
-        headers = {
-            'X-Api-Key': API_KEY,  # KEY in header to hide it from url
-        }
+    headers = {
+        'X-Api-Key': API_KEY,  # KEY in header to hide it from url
+    }
 
-        url = 'https://newsapi.org/v2/top-headlines'
+    url = 'https://newsapi.org/v2/top-headlines'
 
-        response = requests.get(url, params=params, headers=headers)
-        data = response.json()
+    response = requests.get(url, params=params, headers=headers)
+    data = response.json()
 
-        articles = data["articles"]
-        news_data = json.dumps(articles, indent=4)
+    articles = data["articles"]
+    news_data = json.dumps(articles, indent=4)
     return JsonResponse({"status":200,"news":news_data})
