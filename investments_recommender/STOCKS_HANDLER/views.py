@@ -117,3 +117,20 @@ def get_user_stocks(request):
         })
     
     return JsonResponse({"status":True,"user_stocks":user_stocks,"user_watchlist":user_watchlist},safe=False)
+
+
+def add_stock_to_watchlist(request):
+    request_data = json.loads(request.body)
+    user_id = str(request_data['user_id'])
+    user_data = db.reference("/Users").get(user_id)[0][user_id]
+    stock = str(request_data['stock'])
+    user_data['watchlist'].append(stock)
+    try:
+        ref = db.reference("/Users")
+        ref.update({
+            user_id: user_data,
+        })
+        return JsonResponse({"status":True,"message":"Stock added to watchlist"},safe=False)
+    except Exception as e:
+        print(e)
+        return JsonResponse({"status":False,"message":"Issue in adding stock"},safe=False)
