@@ -3,10 +3,10 @@
 ### To run the project:
 
 Backend: <br>
-- Change directory to the ```investment_recommender```<br>
-- Start a virtual environment <br>
+- Start a virtual environment ```python -m venv env``` <br>
 - Install packages in requirements.txt ```python -m pip install -r requirements.txt``` <br>
-- Run command ```python manage.py runserver```
+- Change directory to the ```investment_recommender```<br>
+- Run command ```python manage.py migrate```, then ```python manage.py runserver```
 <br>
 Frontend:
 
