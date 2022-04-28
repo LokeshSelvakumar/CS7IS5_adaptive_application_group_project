@@ -17,3 +17,12 @@ The frontend is run on VSCode using [Live Server](https://marketplace.visualstud
 - Open webpage at http://127.0.0.1:5500/CS7IS5_adaptive_application_group_project/basicUI/login.html
 
 **Sample Login:**<br> user: "1950809226",  password: "2H1Fk"
+
+Telebot - BullFinch <br>
+To run the telegram bot, telegram application and a username on the telegram is mandatory. <br>
+- search Bullfinch in the telegram and you can find the bot with dicaprio picture.
+- Type '/start' or click 'start' button to kick start the sign up process.
+
+To run the Bot script locally (Visual Studio code recommended): <br>
+- Navigate to 'Refrences' directory and install all the dependencies in the requirements.txt file using the command pip install -r 'requirements.txt'
+- to run the bot script use the command 'python tg-bottest.py'
