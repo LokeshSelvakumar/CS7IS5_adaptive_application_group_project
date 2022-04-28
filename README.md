@@ -18,8 +18,8 @@ The frontend is run on VSCode using [Live Server](https://marketplace.visualstud
 
 **Sample Login:**<br> user: "1950809226",  password: "2H1Fk"
 
-Telebot - BullFinch <br>
-To run the telegram bot, telegram application and a username on the telegram is mandatory. <br>
+Telebot - BullFinch
+To run the telegram bot, telegram application and a username on the telegram is mandatory.
 - search Bullfinch in the telegram and you can find the bot with dicaprio picture.
 - Type '/start' or click 'start' button to kick start the sign up process.
 
