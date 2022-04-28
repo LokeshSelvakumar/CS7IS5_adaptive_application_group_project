@@ -35,8 +35,7 @@ def send_news():
     ref = db.reference("/Users")
     users = ref.get()
     ref = users[user_id]['sector_preference']
-    print(ref)
-    API_KEY = 'fb3a5891a786455bb898f36e92b09f24'
+    API_KEY = ''
 
     bot.send_message(user_id, "Good Evening! Here are the news articles you may be interested in.")
     time.sleep(1)
@@ -71,7 +70,7 @@ def send_news():
 
 def send_stock():
     user_id = '1950809226'
-    API_KEY = 'fb3a5891a786455bb898f36e92b09f24'
+    API_KEY = ''
 
     bot.send_message(user_id, "Good evening! This is today's gainers!")
     data = si.get_day_gainers()
