@@ -20,7 +20,7 @@ The frontend is run on VSCode using [Live Server](https://marketplace.visualstud
 
 Telebot - BullFinch
 To run the telegram bot, telegram application and a username on the telegram is mandatory.
-- search Bullfinch in the telegram and you can find the bot with dicaprio picture.
+- search Bullfinch in the telegram and you can find the bot with Dicaprio picture.
 - Type '/start' or click 'start' button to kick start the sign up process.
 
 To run the Bot script locally (Visual Studio code recommended): <br>
