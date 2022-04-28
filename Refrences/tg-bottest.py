@@ -5,6 +5,8 @@ from telebot.callback_data import CallbackData, CallbackDataFilter
 from telebot import types
 import requests
 import json
+import prettytable as pt
+
 
 bot = telebot.TeleBot("5356735903:AAGIUWFapkm7AcpAhyV44n-yojw1Sa3CNl0")
 
@@ -38,8 +40,36 @@ class User:
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     print(message.chat.id)
+    bot.send_photo(message.chat.id, photo=open('Refrences\intro_message.jpg', 'rb'))
     response = bot.reply_to(message, "Howdy, Nice to Meet You!!\nWhat is your name?")
     bot.register_next_step_handler(response, process_name_step)
+
+@bot.message_handler(commands=['recommend', 'help'])
+def recommend(message):
+    print("inside recommender")
+    response = requests.post("http://10.6.50.60:8001/stocks/recommend/",json = {"user_id":message.chat.id})
+    response = json.loads(response.text)
+    res = response['recommendations']
+    data = response['recommendations']['data']
+    table = pt.PrettyTable(['Stock','Price','profit margin'])
+    # table.align['Stock'] = 'l'
+    # table.align['Sector'] = 'l'
+    # table.align['Risk'] = 'l'
+    # table.align['Price'] = 'l'
+    # table.align['profit'] = 'l'
+    table_data = []
+    sendTex = ""
+    sendTex =  sendTex + (str(res['columns']))+"\n"   
+    for symbol,sec,ris,cP,pM in data:
+        table.add_row([symbol,f'{cP}',f'{pM:.2f}'])
+    #    sendTex = sendTex + (str(each))+"\n" 
+    bot.send_message(message.chat.id,f'<pre>{table}</pre>',parse_mode = 'HTML')
+
+def send_welcome(message):
+    print(message.chat.id)
+    bot.send_photo(message.chat.id, photo=open('Refrences\intro_message.jpg', 'rb'))
+    response = bot.reply_to(message, "Howdy, Nice to Meet You!!\nWhat is your name?")
+    bot.register_next_step_handler(response, process_name_step)    
 
 def process_name_step(message):
     try:
@@ -47,9 +77,8 @@ def process_name_step(message):
         name = message.text
         user = User(name,chat_id)
         user_dict[chat_id] = user
-        # response = requests.post("http://192.168.0.157:8001/user/createUser/",json = user.test())
         msg = bot.reply_to(message, 'How old are you?')
-        # bot.register_next_step_handler(msg, process_age_step)
+        bot.register_next_step_handler(msg, process_age_step)
     except Exception as e:
         bot.reply_to(message, 'oooops')
 
@@ -156,9 +185,9 @@ def check_portfolio(message):
         user.stock_invested = text
         if text == 'Yes':
             msg = bot.reply_to(message, 'Lets create a portfolio for you \n\
-To add stock to your portfolio follow the format: <stock_symbol> <units>\n eg: amzn 100\n\
-Please refer the stock symbols in the link below')
-            bot.send_message(chat_id,"https://www.slickcharts.com/sp500",parse_mode='HTML')
+To add stock to your portfolio follow the format: [stock_symbol] [units]\n eg: amzn 100\n\
+Please refer the stock symbols in the link below\n\
+https://www.slickcharts.com/sp500',parse_mode='HTML')
             bot.register_next_step_handler(msg, add_portfolio)
         elif text == 'No':
             msg = bot.reply_to(message,"what are the stocks you wish to add to your watchlist?\n\
@@ -327,13 +356,15 @@ def save_betting_pref(message):
         user = user_dict[message.chat.id]
         user.score_risk = user.score_risk + score_dict[message.text]
         print("before requests")
-        response = requests.post("http://192.168.0.157:8001/user/createUser/",json = user.to_string())
+        response = requests.post("http://10.6.50.60:8001/user/createUser/",json = user.to_string())
         response = json.loads(response.text)
-        bot.send_message(message.chat.id,"Your preferences are stored. Use these credentials to login\n\
-userid:"+str(message.chat.id) +"\npassword: "+response['password'])
-        msg = bot.reply_to(message, "You can check the real-time price of any stocks. Try 'price ticker_name'\n\
-for stock symbol list please refer:")
-        bot.send_message(message.chat.id,"https://www.slickcharts.com/sp500",parse_mode='HTML')
+        print("after requests")
+        sti = open('Refrences\wolf-of-wall-street-cool.mp4','rb')
+        print("after sticker")
+        bot.send_video(message.chat.id, sti)
+        msg = bot.reply_to(message, "Your preferences are stored. Use these credentials to login")
+        bot.send_message(message.chat.id,"userid:"+str(message.chat.id) +"\npassword: "+response['password']);
+        bot.send_message(message.chat.id,"To login click <a href ='https://www.google.com/'>here</a>",parse_mode='HTML')
 
     except:
         bot.reply_to(message,"problem with save_betting_pref")
