@@ -27,7 +27,7 @@ def display_news(request):
     ref = users[user_id]['sector_preference']
 
     # Get news of interest to users
-    API_KEY = 'fb3a5891a786455bb898f36e92b09f24'
+    API_KEY = ''
 
     # Get news according to users' different topics of interest, displaying news items(title) per topic
     params = {
